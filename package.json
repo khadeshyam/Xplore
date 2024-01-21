@@ -1,0 +1,20 @@
+{
+	"name": "socially",
+	"version": "1.0.0",
+	"private": "true",
+	"workspaces": [
+		"client",
+		"api"
+	],
+	"scripts": {
+		"client": "cd client && npm start",
+		"client:build": "cd client && npm run build",
+		"api": "cd api && npm run dev",
+		"api:prod": "cd api && npm run start",
+		"dev": "concurrently --kill-others \"npm run api\" \"npm run client\"",
+		"start": "npm run build:client && npm run api:prod"
+	},
+	"devDependencies": {
+		"concurrently": "^8.2.2"
+	}
+}
