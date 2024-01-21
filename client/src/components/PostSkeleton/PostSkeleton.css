@@ -1,0 +1,59 @@
+.postSkeleton {
+	width: 385px;
+	margin: 0px 25px 40px 25px;
+	position: relative;
+	overflow: hidden;
+}
+
+.postSkeletonImg,
+.postSkeletonCat,
+.postSkeletonTitle,
+.postSkeletonDate,
+.postSkeletonDesc {
+	position: relative;
+	background: #e7e7e7;
+	overflow: hidden;
+}
+
+.postSkeletonImg::before,
+.postSkeletonTitle::before,
+.postSkeletonDate::before,
+.postSkeletonDesc::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: -100%;
+	width: 100%;
+	height: 100%;
+	background: linear-gradient(to right, transparent 0%, #fff 50%, transparent 100%);
+	animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+	0% { left: -100%; }
+	100% { left: 100%; }
+}
+
+.postSkeletonImg {
+	width: 100%;
+	height: 280px;
+	border-radius: 7px;
+}
+
+.postSkeletonInfo {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.postSkeletonTitle,
+.postSkeletonDate,
+.postSkeletonDesc {
+	width: 90%;
+	height: 20px;
+	margin-top: 15px;
+}
+
+.postSkeletonTitle {
+	height: 24px;
+}

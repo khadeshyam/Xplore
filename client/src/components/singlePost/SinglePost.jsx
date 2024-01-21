@@ -4,6 +4,7 @@ import { useLocation } from "react-router";
 import { Link } from "react-router-dom";
 import { Context } from "../../context/Context";
 import "./singlePost.css";
+import SinglePostSkeleton from "../SinglePostSkeleton/SinglePostSkeleton";
 
 export default function SinglePost() {
   const location = useLocation();
@@ -14,6 +15,7 @@ export default function SinglePost() {
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [updateMode, setUpdateMode] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const getPost = async () => {
@@ -21,6 +23,7 @@ export default function SinglePost() {
       setPost(res.data);
       setTitle(res.data.title);
       setDesc(res.data.desc);
+        setIsLoading(false);
     };
     getPost();
   }, [path]);
@@ -44,6 +47,10 @@ export default function SinglePost() {
       setUpdateMode(false)
     } catch (err) {}
   };
+
+  if (isLoading) {
+    return <SinglePostSkeleton />;
+  }
 
   return (
     <div className="singlePost">

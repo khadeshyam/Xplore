@@ -1,28 +1,27 @@
 import "./settings.css";
 import Sidebar from "../../components/sidebar/Sidebar";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Context } from "../../context/Context";
 import axios from "axios";
 
 export default function Settings() {
   const [file, setFile] = useState(null);
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [success, setSuccess] = useState(false);
 
   const { user, dispatch } = useContext(Context);
-  const PF = "http://localhost:5000/images/"
+  const PF = "http://localhost:5000/images/";
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    dispatch({ type: "UPDATE_START" });
-    const updatedUser = {
-      userId: user._id,
-      username,
-      email,
-      password,
-    };
+  const [updatedUser, setUpdatedUser] = useState({
+    userId: user._id,
+    username: user.username,
+    email: user.email
+  });
+
+  const handleChange = (e) => {
+    setUpdatedUser({ ...updatedUser, [e.target.name]: e.target.value });
+  };
+
+  const uploadFile = async () => {
     if (file) {
       const data = new FormData();
       const filename = Date.now() + file.name;
@@ -31,8 +30,20 @@ export default function Settings() {
       updatedUser.profilePic = filename;
       try {
         await axios.post("/upload", data);
-      } catch (err) {}
+      } catch (err) {
+        console.log('err uploading file', err);
+      }
     }
+  };
+
+  useEffect(() => {
+    file && uploadFile();
+    console.log("file changed");
+  }, [file]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    dispatch({ type: "UPDATE_START" });
     try {
       const res = await axios.put("/users/" + user._id, updatedUser);
       setSuccess(true);
@@ -41,6 +52,7 @@ export default function Settings() {
       dispatch({ type: "UPDATE_FAILURE" });
     }
   };
+
   return (
     <div className="settings">
       <div className="settingsWrapper">
@@ -68,20 +80,23 @@ export default function Settings() {
           <label>Username</label>
           <input
             type="text"
-            placeholder={user.username}
-            onChange={(e) => setUsername(e.target.value)}
+            name="username"
+            value={updatedUser.username}
+            onChange={handleChange}
           />
           <label>Email</label>
           <input
             type="email"
-            placeholder={user.email}
-            onChange={(e) => setEmail(e.target.value)}
+            name="email"
+            value={updatedUser.email}
+            onChange={handleChange}
           />
-          <label>Password</label>
+          {/* <label>Password</label>
           <input
             type="password"
-            onChange={(e) => setPassword(e.target.value)}
-          />
+            name="password"
+            onChange={handleChange}
+          /> */}
           <button className="settingsSubmit" type="submit">
             Update
           </button>

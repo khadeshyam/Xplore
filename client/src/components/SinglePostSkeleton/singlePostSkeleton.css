@@ -1,0 +1,70 @@
+/* singlePostSkeleton.css */
+.singlePostSkeleton {
+	flex: 9;
+}
+
+.singlePostWrapperSkeleton {
+	padding: 20px;
+	padding-right: 0;
+	display: flex;
+	flex-direction: column;
+}
+
+.singlePostImgSkeleton,
+.singlePostTitleSkeleton,
+.singlePostDescSkeleton {
+	position: relative;
+	background: #e7e7e7;
+	overflow: hidden;
+}
+
+.singlePostImgSkeleton::before,
+.singlePostTitleSkeleton::before,
+.singlePostDescSkeleton::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: -100%;
+	width: 100%;
+	height: 100%;
+	background: linear-gradient(to right, transparent 0%, #fff 50%, transparent 100%);
+	animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+	0% { left: -100%; }
+	100% { left: 100%; }
+}
+
+.singlePostImgSkeleton {
+	width: 100%;
+	height: 300px;
+	border-radius: 5px;
+}
+
+.singlePostTitleSkeleton {
+	display: inline-block;
+	text-align: center;
+	margin: 10px auto; /* This will center the title horizontally */
+	font-family: "Lora", serif;
+	font-size: 28px;
+	height: 36px;
+	width: 60%; /* This will make the title take half the width of its parent */
+}
+
+.singlePostInfoSkeleton {
+	margin-bottom: 20px;
+	display: flex;
+	justify-content: space-between;
+	font-size: 16px;
+	font-family: "Varela Round", sans-serif;
+	color: #b39656;
+  }
+
+.singlePostDescSkeleton {
+	color: #666;
+	font-size: 18px;
+	margin: 2px;
+	line-height: 16px;
+	height: 16px; /* Adjust based on your needs */
+}
