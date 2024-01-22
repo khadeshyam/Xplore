@@ -97,3 +97,71 @@
   align-self: flex-end;
   margin-top: 20px;
 }
+
+/* Tablet devices (width up to 768px) */
+@media only screen and (max-width: 768px) {
+  .singlePostWrapper {
+    padding: 10px;
+  }
+
+  .singlePostImg {
+    height: 200px;
+  }
+
+  .singlePostTitle, .singlePostTitleInput {
+    font-size: 24px;
+  }
+
+  .singlePostDesc {
+    font-size: 16px;
+    line-height: 22px;
+  }
+
+  .singlePostDesc::first-letter {
+    font-size: 26px;
+  }
+
+  .singlePostDescInput {
+    font-size: 16px;
+    line-height: 22px;
+  }
+
+  .singlePostButton {
+    width: 80px;
+    padding: 4px;
+  }
+}
+
+/* Mobile devices (width up to 480px) */
+@media only screen and (max-width: 480px) {
+  .singlePostWrapper {
+    padding: 5px;
+  }
+
+  .singlePostImg {
+    height: 200px;
+  }
+
+  .singlePostTitle, .singlePostTitleInput {
+    font-size: 20px;
+  }
+
+  .singlePostDesc {
+    font-size: 16px;
+    line-height: 20px;
+  }
+
+  .singlePostDesc::first-letter {
+    font-size: 22px;
+  }
+
+  .singlePostDescInput {
+    font-size: 16px;
+    line-height: 20px;
+  }
+
+  .singlePostButton {
+    width: 70px;
+    padding: 3px;
+  }
+}

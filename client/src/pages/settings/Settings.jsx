@@ -11,6 +11,11 @@ export default function Settings() {
   const { user, dispatch } = useContext(Context);
   const PF = "http://localhost:5000/images/";
 
+  const handleLogout = () => {
+    dispatch({ type: "LOGOUT" });
+  };
+
+
   const [updatedUser, setUpdatedUser] = useState({
     userId: user._id,
     username: user.username,
@@ -58,7 +63,7 @@ export default function Settings() {
       <div className="settingsWrapper">
         <div className="settingsTitle">
           <span className="settingsUpdateTitle">Update Your Account</span>
-          <span className="settingsDeleteTitle">Delete Account</span>
+          {user && <span className="settingsDeleteTitle" onClick={handleLogout}>Logout</span>}
         </div>
         <form className="settingsForm" onSubmit={handleSubmit}>
           <label>Profile Picture</label>
@@ -91,12 +96,6 @@ export default function Settings() {
             value={updatedUser.email}
             onChange={handleChange}
           />
-          {/* <label>Password</label>
-          <input
-            type="password"
-            name="password"
-            onChange={handleChange}
-          /> */}
           <button className="settingsSubmit" type="submit">
             Update
           </button>

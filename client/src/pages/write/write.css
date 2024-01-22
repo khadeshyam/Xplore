@@ -61,3 +61,35 @@
   cursor: pointer;
   font-size: 16px;
 }
+
+/* Tablet devices (width up to 768px) */
+@media only screen and (max-width: 768px) {
+  .writeImg, .writeFormGroup {
+    margin-left: 50px;
+    width: 80vw;
+  }
+  .writeInput {
+    font-size: 20px;
+    padding: 10px;
+    width: 80vw;
+  }
+  .writeSubmit {
+    right: 20px;
+  }
+}
+
+/* Mobile devices (width up to 480px) */
+@media only screen and (max-width: 480px) {
+  .writeImg, .writeFormGroup {
+    margin-left: 20px;
+    width: 90vw;
+  }
+  .writeInput {
+    font-size: 16px;
+    padding: 10px;
+    width: 90vw;
+  }
+  .writeSubmit {
+    right: 10px;
+  }
+}

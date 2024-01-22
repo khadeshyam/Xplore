@@ -58,3 +58,43 @@
   cursor: pointer;
   margin-left: 15px;
 }
+
+.topListItem.home::before {
+  content: "\f015"; /* Unicode for fa-home */
+  font-family: "Font Awesome 5 Free";
+  display: none;
+}
+
+.topListItem.write::before {
+  content: "\f303"; /* Unicode for fa-pencil-alt */
+  font-family: "Font Awesome 5 Free";
+  display: none;
+}
+
+/* Mobile devices (width up to 480px) */
+@media only screen and (max-width: 480px) {
+
+  .topLeft,.topSearchIcon,.logout{
+    display: none;
+  }
+  .top {
+    position: fixed;
+    top: auto;
+    bottom: 0;
+  }
+
+  .topCenter {
+    flex: 2;
+  }
+
+  .topCenter .topList{
+    justify-content: space-evenly;
+  }
+ 
+  .topRight{
+    flex: 1;
+  }  
+
+  
+  
+}
