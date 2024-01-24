@@ -5,9 +5,7 @@ on:
   push:
     branches:
       - master
-  pull_request:
-    branches:
-      - master
+
 
 env:
   PAT: ${{ secrets.PAT }}  
@@ -82,5 +80,5 @@ jobs:
           echo "No changes to commit"
         else
           git commit -m "Update files"
-          git push origin master
+          git push origin main
         fi
