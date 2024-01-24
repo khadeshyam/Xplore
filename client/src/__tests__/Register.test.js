@@ -1,7 +1,7 @@
 import { render, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import faker from 'faker';
-import axios from 'axios';
+import API from '../utils/axios';
 import Register from './Register'; // import your Register component
 import { BrowserRouter } from 'react-router-dom';
 
@@ -14,7 +14,7 @@ test('should register with valid credentials', async () => {
   const password = faker.internet.password();
 
   // Mock the axios post call
-  axios.post.mockResolvedValue({ data: {} });
+  API.post.mockResolvedValue({ data: {} });
 
   // Render the Register component
   const { getByLabelText, getByRole, getByText } = render(
@@ -32,7 +32,7 @@ test('should register with valid credentials', async () => {
   fireEvent.click(getByRole('button', { name: /register/i }));
 
   // Wait for the form to be submitted and the axios post call to be made
-  await waitFor(() => expect(axios.post).toHaveBeenCalledWith("/auth/register", { username, email, password }));
+  await waitFor(() => expect(API.post).toHaveBeenCalledWith("/auth/register", { username, email, password }));
 
   // Add any additional assertions you want here
 });
