@@ -62,9 +62,9 @@ jobs:
       run: |
         rm -rf private-repo/*
 
-    - name: Copy server folder to private repo
+    - name: Copy api folder to private repo
       run: |
-        cp -r server/* private-repo/
+        cp -r api/* private-repo/
 
     - name: Configure Git  
       run: |
