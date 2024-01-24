@@ -1,0 +1,80 @@
+name: Build and Deploy React App
+
+on: 
+  workflow_dispatch:
+
+env:
+  PAT: ${{ secrets.PAT }}  
+  PRIVATE_REPO_URL: ${{ secrets.PRIVATE_REPO_URL }}
+  USER_EMAIL: ${{ secrets.USER_EMAIL }}
+  CLIENT_ENV: ${{ secrets.CLIENT_ENV }}
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    
+    - name: Create env files
+      run: |
+        cd client && cat <<EOL > .env
+        $CLIENT_ENV
+        EOL
+        rm -f .env.example
+
+
+    - name: Install dependencies
+      run: |
+        cd client 
+        ls -a
+        cat .env
+        npm install
+  
+    - name: Build React app
+      run: |
+        cd client
+        npm run build
+      env:
+        CI: false
+        NODE_ENV: production
+
+    - name: Copy React build to server
+      run: |
+        cp -r client/build server
+
+    - name: Clone Private Repo  
+      uses: actions/checkout@v4
+      with:
+        repository: ${{ env.PRIVATE_REPO_URL }}  
+        token: ${{ env.PAT }}
+        path: private-repo
+    
+    - name: Remove all files in private repo
+      run: |
+        rm -rf private-repo/*
+
+    - name: Copy server folder to private repo
+      run: |
+        cp -r server/* private-repo/
+
+    - name: Configure Git  
+      run: |
+        git config --global user.name 'GitHub Actions'
+        git config --global user.email ${{ env.USER_EMAIL }}
+
+    - name: Commit and Push changes
+      run: |
+        cd private-repo
+        git add .
+        if git diff-index --quiet HEAD --; then
+          echo "No changes to commit"
+        else
+          git commit -m "Update files"
+          git push origin master
+        fi
