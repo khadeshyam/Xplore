@@ -47,9 +47,9 @@ jobs:
         CI: false
         NODE_ENV: production
 
-    - name: Copy React build to server
+    - name: Copy React build to api folder
       run: |
-        cp -r client/build server
+        cp -r client/build api
 
     - name: Clone Private Repo  
       uses: actions/checkout@v4
