@@ -4,10 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - master
-  pull_request:
-    branches:
-      - master
+      - main
 
 env:
   PAT: ${{ secrets.PAT }}  
