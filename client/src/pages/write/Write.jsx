@@ -2,17 +2,19 @@ import { useContext, useState } from "react";
 import "./write.css";
 import { Context } from "../../context/Context";
 import API from "../../utils/axios";
+import { useNavigate } from "react-router-dom";
 
 export default function Write() {
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [file, setFile] = useState(null);
   const { user } = useContext(Context);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = new FormData();
-    const filename = file.name + Date.now();
+    const filename = file?.name + Date.now();
     data.append("file", file);
     data.append("name", filename);
     data.append("username", user.username);
@@ -20,11 +22,13 @@ export default function Write() {
     data.append("desc", desc);
     try {
       const res = await API.post("/posts", data);
-      window.location.replace("/post/" + res.data._id);
-    } catch (err) { 
+      console.log('res', res);
+      console.log('res', res?.data?._id);
+      res?.data?._id && navigate(`/post/${res?.data?._id}`);
+    } catch (err) {
       console.log('err posting file',);
     }
-  };  return (
+  }; return (
     <div className="write">
       {file && (
         <img className="writeImg" src={URL.createObjectURL(file)} alt="" />

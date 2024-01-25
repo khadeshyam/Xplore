@@ -22,7 +22,7 @@ export default function SinglePost() {
       setPost(res.data);
       setTitle(res.data.title);
       setDesc(res.data.desc);
-        setIsLoading(false);
+      setIsLoading(false);
     };
     getPost();
   }, [path]);
