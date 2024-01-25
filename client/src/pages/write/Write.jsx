@@ -11,27 +11,20 @@ export default function Write() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const newPost = {
-      username: user.username,
-      title,
-      desc,
-    };
-    if (file) {
-      const data =new FormData();
-      const filename = Date.now() + file.name;
-      data.append("name", filename);
-      data.append("file", file);
-      newPost.photo = filename;
-      try {
-        await API.post("/upload", data);
-      } catch (err) {}
-    }
+    const data = new FormData();
+    const filename = file.name + Date.now();
+    data.append("file", file);
+    data.append("name", filename);
+    data.append("username", user.username);
+    data.append("title", title);
+    data.append("desc", desc);
     try {
-      const res = await API.post("/posts", newPost);
+      const res = await API.post("/posts", data);
       window.location.replace("/post/" + res.data._id);
-    } catch (err) {}
-  };
-  return (
+    } catch (err) { 
+      console.log('err posting file',);
+    }
+  };  return (
     <div className="write">
       {file && (
         <img className="writeImg" src={URL.createObjectURL(file)} alt="" />
@@ -52,7 +45,7 @@ export default function Write() {
             placeholder="Title"
             className="writeInput"
             autoFocus={true}
-            onChange={e=>setTitle(e.target.value)}
+            onChange={e => setTitle(e.target.value)}
           />
         </div>
         <div className="writeFormGroup">
@@ -60,7 +53,7 @@ export default function Write() {
             placeholder="Tell your story..."
             type="text"
             className="writeInput writeText"
-            onChange={e=>setDesc(e.target.value)}
+            onChange={e => setDesc(e.target.value)}
           ></textarea>
         </div>
         <button className="writeSubmit" type="submit">

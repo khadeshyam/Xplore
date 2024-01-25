@@ -3,13 +3,14 @@ import Sidebar from "../../components/sidebar/Sidebar";
 import { useContext, useEffect, useState } from "react";
 import { Context } from "../../context/Context";
 import API from "../../utils/axios";
+import { set } from "mongoose";
 
 export default function Settings() {
   const [file, setFile] = useState(null);
   const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(null);
 
   const { user, dispatch } = useContext(Context);
-  const PF = "http://localhost:5000/images/";
 
   const handleLogout = () => {
     dispatch({ type: "LOGOUT" });
@@ -17,7 +18,6 @@ export default function Settings() {
 
 
   const [updatedUser, setUpdatedUser] = useState({
-    userId: user._id,
     username: user.username,
     email: user.email
   });
@@ -26,35 +26,27 @@ export default function Settings() {
     setUpdatedUser({ ...updatedUser, [e.target.name]: e.target.value });
   };
 
-  const uploadFile = async () => {
-    if (file) {
-      const data = new FormData();
-      const filename = Date.now() + file.name;
-      data.append("name", filename);
-      data.append("file", file);
-      updatedUser.profilePic = filename;
-      try {
-        await API.post("/upload", data);
-      } catch (err) {
-        console.log('err uploading file', err);
-      }
-    }
-  };
-
-  useEffect(() => {
-    file && uploadFile();
-    console.log("file changed");
-  }, [file]);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     dispatch({ type: "UPDATE_START" });
     try {
-      const res = await API.put("/users/" + user._id, updatedUser);
-      setSuccess(true);
+      const data = new FormData();
+      if (file) {
+        data.append("file", file);
+      }
+      data.append("username", updatedUser.username);
+      data.append("email", updatedUser.email);
+
+      const res = await API.put("/users/" + user._id, data);
       dispatch({ type: "UPDATE_SUCCESS", payload: res.data });
+      setSuccess(true);
+      setError(null);
+      setFile(null);
     } catch (err) {
+      console.log(err);
       dispatch({ type: "UPDATE_FAILURE" });
+      setError(err?.response?.data?.error);
+      setSuccess(false);
     }
   };
 
@@ -69,7 +61,7 @@ export default function Settings() {
           <label>Profile Picture</label>
           <div className="settingsPP">
             <img
-              src={file ? URL.createObjectURL(file) : PF+user.profilePic}
+              src={file ? URL.createObjectURL(file) : user.profilePic}
               alt=""
             />
             <label htmlFor="fileInput">
@@ -104,6 +96,13 @@ export default function Settings() {
               style={{ color: "green", textAlign: "center", marginTop: "20px" }}
             >
               Profile has been updated...
+            </span>
+          )}
+          {error && (
+            <span
+              style={{ color: "red", textAlign: "center", marginTop: "20px" }}
+            >
+              {error}
             </span>
           )}
         </form>

@@ -9,6 +9,7 @@ import API from "../../utils/axios";
 export default function Home() {
   const [posts, setPosts] = useState([]);
   const { search } = useLocation();
+  console.log(posts);
 
   useEffect(() => {
     const fetchPosts = async () => {

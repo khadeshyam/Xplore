@@ -1,29 +1,42 @@
 const router = require("express").Router();
 const User = require("../models/User");
 const Post = require("../models/Post");
-const bcrypt = require("bcrypt");
+const upload = require("../middlewares/multer");
+const uplaodToCloudinary = require("../utils/upload-to-cloudinary");
 
 //UPDATE
-router.put("/:id", async (req, res) => {
-  if (req.body.userId === req.params.id) {
-    if (req.body.password) {
-      const salt = await bcrypt.genSalt(10);
-      req.body.password = await bcrypt.hash(req.body.password, salt);
+router.put("/:id", upload.single('file'), async (req, res) => {
+  try {
+    console.log('req.body ', req.body);
+    console.log('req.params.id ', req.params.id);
+    console.log('req.file ', req.file);
+
+    if(req.file){
+      const file = req.file;
+      const uploadResponse = await uplaodToCloudinary(file);
+      console.log('uploadResponse ', uploadResponse);
+      const downloadURL = uploadResponse.secure_url;
+      req.body.profilePic = downloadURL;
     }
-    try {
-      const updatedUser = await User.findByIdAndUpdate(
-        req.params.id,
-        {
-          $set: req.body,
-        },
-        { new: true }
-      );
-      res.status(200).json(updatedUser);
-    } catch (err) {
+
+    console.log('req.body ', req.body);
+
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.id,
+      {
+        $set: req.body,
+      },
+      { new: true }
+    );
+    const { password, ...others } = updatedUser._doc;
+    res.status(200).json(others);
+  } catch (err) {
+    if (err.code === 11000) {
+      res.status(400).json({ error: 'Username or email already in use' });
+    } else {
+      console.log('err updating: ', err);
       res.status(500).json(err);
     }
-  } else {
-    res.status(401).json("You can update only your account!");
   }
 });
 

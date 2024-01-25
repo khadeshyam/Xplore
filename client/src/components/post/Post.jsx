@@ -5,13 +5,12 @@ import { useState } from "react";
 export default function Post({ post }) {
   const [imgLoaded, setImgLoaded] = useState(false);
 
-  const PF = "http://localhost:5000/images/";
   return (
     <div className="post">
       {post.photo && (
         <img
           className={`postImg ${imgLoaded ? 'loaded' : ''}`}
-          src={PF + post.photo}
+          src={post.photo}
           alt=""
           onLoad={() => setImgLoaded(true)}
           lazy="true"

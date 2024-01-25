@@ -1,14 +1,30 @@
 const router = require("express").Router();
 const User = require("../models/User");
 const Post = require("../models/Post");
+const upload = require('../middlewares/multer');
+const uplaodToCloudinary = require('../utils/upload-to-cloudinary');
+
 
 //CREATE POST
-router.post("/", async (req, res) => {
-  const newPost = new Post(req.body);
+router.post("/", upload.single('file'), async (req, res) => {
+  console.log('req.body : ', req.body);
+  console.log('req.file : ', req.file);
   try {
-    const savedPost = await newPost.save();
-    res.status(200).json(savedPost);
+    const file = req.file;
+    const uploadResponse = await uplaodToCloudinary(file);
+    const downloadURL = uploadResponse.secure_url;
+
+    const newPost = new Post({
+      username: req.body.username,
+      title: req.body.title,
+      desc: req.body.desc,
+      photo: downloadURL
+    });
+    
+    await newPost.save();
+    res.status(200).json(newPost);
   } catch (err) {
+    console.log('err posting: ', err);
     res.status(500).json(err);
   }
 });
@@ -41,18 +57,22 @@ router.put("/:id", async (req, res) => {
 //DELETE POST
 router.delete("/:id", async (req, res) => {
   try {
+    console.log('DELETE POST');
     const post = await Post.findById(req.params.id);
     if (post.username === req.body.username) {
       try {
-        await post.delete();
+        await Post.findByIdAndDelete(req.params.id);
         res.status(200).json("Post has been deleted...");
       } catch (err) {
+        console.log('err deleting: post', err);
         res.status(500).json(err);
       }
     } else {
+      console.log('err deleting: post');
       res.status(401).json("You can delete only your post!");
     }
   } catch (err) {
+    console.log('err deleting: post', err);
     res.status(500).json(err);
   }
 });
