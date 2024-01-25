@@ -1,9 +1,8 @@
 import "./settings.css";
 import Sidebar from "../../components/sidebar/Sidebar";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { Context } from "../../context/Context";
 import API from "../../utils/axios";
-import { set } from "mongoose";
 
 export default function Settings() {
   const [file, setFile] = useState(null);
