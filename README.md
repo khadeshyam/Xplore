@@ -1,4 +1,4 @@
-# Blog Website
+# Xplore - A Blog Website
 
 This is a full-stack blog website project that allows users to create, read, update, and delete blog posts. It features user authentication, post categorization, and image uploading capabilities.
 
