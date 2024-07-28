@@ -13,12 +13,14 @@ router.post("/", upload.single('file'), async (req, res) => {
     const file = req.file;
     const uploadResponse = await uplaodToCloudinary(file);
     const downloadURL = uploadResponse.secure_url;
+    const categories = req.body.categories ? JSON.parse(req.body.categories) : [];
 
     const newPost = new Post({
       username: req.body.username,
       title: req.body.title,
       desc: req.body.desc,
-      photo: downloadURL
+      photo: downloadURL,
+      categories: categories
     });
     
     await newPost.save();
