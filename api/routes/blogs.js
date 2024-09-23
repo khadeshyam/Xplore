@@ -1,11 +1,10 @@
 const router = require("express").Router();
-const User = require("../models/User");
-const Post = require("../models/Post");
+const Blog = require("../models/Blog");
 const upload = require('../middlewares/multer');
 const uplaodToCloudinary = require('../utils/upload-to-cloudinary');
 
 
-//CREATE POST
+//CREATE BLOG
 router.post("/", upload.single('file'), async (req, res) => {
   console.log('req.body : ', req.body);
   console.log('req.file : ', req.file);
@@ -15,7 +14,7 @@ router.post("/", upload.single('file'), async (req, res) => {
     const downloadURL = uploadResponse.secure_url;
     const categories = req.body.categories ? JSON.parse(req.body.categories) : [];
 
-    const newPost = new Post({
+    const newBlog = new Blog({
       username: req.body.username,
       title: req.body.title,
       desc: req.body.desc,
@@ -23,90 +22,91 @@ router.post("/", upload.single('file'), async (req, res) => {
       categories: categories
     });
     
-    await newPost.save();
-    res.status(200).json(newPost);
+    await newBlog.save();
+    res.status(200).json(newBlog);
   } catch (err) {
     console.log('err posting: ', err);
     res.status(500).json(err);
   }
 });
 
-//UPDATE POST
+//UPDATE BLOG
 router.put("/:id", async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id);
-    if (post.username === req.body.username) {
+    const blog = await Blog.findById(req.params.id);
+    if (blog.username === req.body.username) {
       try {
-        const updatedPost = await Post.findByIdAndUpdate(
+        const updatedBlog = await Blog.findByIdAndUpdate(
           req.params.id,
           {
             $set: req.body,
           },
           { new: true }
         );
-        res.status(200).json(updatedPost);
+        res.status(200).json(updatedBlog);
       } catch (err) {
         res.status(500).json(err);
       }
     } else {
-      res.status(401).json("You can update only your post!");
+      res.status(401).json("You can update only your blog!");
     }
   } catch (err) {
     res.status(500).json(err);
   }
 });
 
-//DELETE POST
+//DELETE BLOG
 router.delete("/:id", async (req, res) => {
   try {
-    console.log('DELETE POST');
-    const post = await Post.findById(req.params.id);
-    if (post.username === req.body.username) {
+    console.log('DELETE BLOG');
+    const blog = await Blog.findById(req.params.id);
+    if (blog.username === req.body.username) {
       try {
-        await Post.findByIdAndDelete(req.params.id);
-        res.status(200).json("Post has been deleted...");
+        await Blog.findByIdAndDelete(req.params.id);
+        res.status(200).json("Blog has been deleted...");
       } catch (err) {
-        console.log('err deleting: post', err);
+        console.log('err deleting: blog', err);
         res.status(500).json(err);
       }
     } else {
-      console.log('err deleting: post');
-      res.status(401).json("You can delete only your post!");
+      console.log('err deleting: blog');
+      res.status(401).json("You can delete only your blog!");
     }
   } catch (err) {
-    console.log('err deleting: post', err);
+    console.log('err deleting: blog', err);
     res.status(500).json(err);
   }
 });
 
-//GET POST
+//GET BLOG
 router.get("/:id", async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id);
-    res.status(200).json(post);
+    const blog = await Blog.findById(req.params.id);
+    res.status(200).json(blog);
   } catch (err) {
     res.status(500).json(err);
   }
 });
 
-//GET ALL POSTS
+//GET ALL BLOGS
 router.get("/", async (req, res) => {
   const username = req.query.user;
   const catName = req.query.cat;
+  console.log('GET ALL users blogs');
   try {
-    let posts;
+    let blogs;
     if (username) {
-      posts = await Post.find({ username });
+      blogs = await Blog.find({ username });
     } else if (catName) {
-      posts = await Post.find({
+      blogs = await Blog.find({
         categories: {
           $in: [catName],
         },
       });
     } else {
-      posts = await Post.find();
+      blogs = await Blog.find();
     }
-    res.status(200).json(posts);
+    res.status(200).json(blogs);
   } catch (err) {
     res.status(500).json(err);
   }

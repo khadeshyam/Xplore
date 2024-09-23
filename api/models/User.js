@@ -20,6 +20,10 @@ const UserSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    blogs: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Blog",
+    }],
   },
   { timestamps: true }
 );

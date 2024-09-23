@@ -13,5 +13,4 @@ root.render(
     </ContextProvider>
   </React.StrictMode>,
 );
-
 removeLogsInProduction();

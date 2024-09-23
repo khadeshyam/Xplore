@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const User = require("../models/User");
-const Post = require("../models/Post");
+const Blog = require("../models/Blog");
 const upload = require("../middlewares/multer");
 const uplaodToCloudinary = require("../utils/upload-to-cloudinary");
 
@@ -46,7 +46,7 @@ router.delete("/:id", async (req, res) => {
     try {
       const user = await User.findById(req.params.id);
       try {
-        await Post.deleteMany({ username: user.username });
+        await Blog.deleteMany({ username: user.username });
         await User.findByIdAndDelete(req.params.id);
         res.status(200).json("User has been deleted...");
       } catch (err) {

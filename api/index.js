@@ -5,7 +5,7 @@ const app = express();
 const mongoose = require("mongoose");
 const authRoute = require("./routes/auth");
 const userRoute = require("./routes/users");
-const postRoute = require("./routes/posts");
+const blogRoute = require("./routes/blogs");
 const categoryRoute = require("./routes/categories");
 const cors = require('cors');
 const path = require("path");
@@ -25,7 +25,7 @@ mongoose
 
 app.use("/api/auth", authRoute);
 app.use("/api/users", userRoute);
-app.use("/api/posts", postRoute);
+app.use("/api/posts", blogRoute);
 app.use("/api/categories", categoryRoute);
 
 
