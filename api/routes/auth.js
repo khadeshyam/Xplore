@@ -16,7 +16,11 @@ router.post("/register", async (req, res) => {
     const user = await newUser.save();
     res.status(200).json(user);
   } catch (err) {
-    res.status(500).json(err);
+    if (err.code === 11000) {
+      res.status(400).json({ message: `username or email already exists.` });
+    } else {
+      res.status(500).json(err);
+    }
   }
 });
 
