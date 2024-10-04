@@ -18,6 +18,7 @@ export default function Write() {
     data.append("file", file);
     data.append("name", filename);
     data.append("username", user.username);
+    data.append("userId", user._id);
     data.append("title", title);
     data.append("desc", desc);
     try {
